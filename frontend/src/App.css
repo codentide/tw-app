@@ -1,0 +1,57 @@
+table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  border-radius: 4px;
+  outline: 1px solid #ccc;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Estilos para el encabezado de la página */
+h2 {
+  text-align: center;
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  height: auto;
+  padding: 24px;
+}
+
+.moduleContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-row: auto;
+  gap: 10px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-buttonBox {
+  display: flex;
+  margin: auto 0 0 0;
+
+  gap: 8px;
+  align-items: center;
+}
