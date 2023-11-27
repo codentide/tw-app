@@ -12,13 +12,37 @@ services:
 
   microservice-proyecto:
     container_name: microservice-proyecto
-    image: microservice-proyecto
+    image: microservice-proyecto:v1
     build:
       context: ./microservice-proyecto
     ports:
-      - "4002:4002"
+      - "4002"
     networks:
       - proyecto-app
+
+  microservice-proyecto-2:
+    container_name: microservice-proyecto-2
+    image: microservice-proyecto:v1
+    build:
+      context: ./microservice-proyecto
+    ports:
+      - "4002"
+    networks:
+      - proyecto-app
+
+  load-balancer:
+    container_name: load-balancer
+    image: load-balancer:v1
+    build: 
+      context: ./microservice-proyecto/load-balancer
+    ports:
+      - "4003:80"
+    networks:
+      - proyecto-app
+    depends_on:
+      - microservice-proyecto
+      - microservice-proyecto-2
+     
 
 networks:
   proyecto-app:
