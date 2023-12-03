@@ -30,7 +30,7 @@ pipeline {
                             string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
                         sh """
-                            docker-compose -f docker-compose.yml up -d
+                            backend/docker-compose.yml docker-compose -f backend/docker-compose.yml up -d                          
                         """
                     }
                 }
