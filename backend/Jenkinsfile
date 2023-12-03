@@ -14,8 +14,14 @@ pipeline {
                     withCredentials([
                         string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
-                        sh "docker build --build-arg MONGO_URI=${MONGO_URI} -t microservice-proyecto:v1 ."
+                      // Construcción de la imagen para microservice-proyecto
+                        sh """
+                            cd microservice-proyecto
+                            docker build --build-arg MONGO_URI=${MONGO_URI} -t microservice-proyecto:v1 .
+                        """                    
                     }
+
+                    
                 }
             }
         }
