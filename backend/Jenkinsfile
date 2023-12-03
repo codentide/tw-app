@@ -15,10 +15,11 @@ pipeline {
                         string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
                       // Construcción de la imagen para microservice-proyecto
-                        sh """
-                            cd microservice-proyecto
-                            docker build --build-arg MONGO_URI=${MONGO_URI} -t microservice-proyecto:v1 .
-                        """                    
+                        dir('microservice-proyecto') {
+                            sh '''
+                                docker build --build-arg MONGO_URI=${MONGO_URI} -t microservice-proyecto:v1 .
+                            '''
+                        }             
                     }
 
                     
@@ -31,10 +32,10 @@ pipeline {
                     withCredentials([
                         string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
-                        sh """
+                        sh ("""
                             sed 's|\\${MONGO_URI}|${MONGO_URI}|g' docker-compose.yml > docker-compose-updated.yml
                             docker-compose -f docker-compose-updated.yml up -d
-                        """
+                        """)
                     }
                 }
             }
