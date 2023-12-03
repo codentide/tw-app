@@ -40,9 +40,9 @@ pipeline{
         always{
             // Send email after build 
             emailext {
-                subject: "Build state: ${currentBuild.currentResult}",
-                body: "Build completed, more details at ${env.BUILD_URL}"
-                to: "marco.delboccio@est.iudigital.edu.co"
+                subject "Build state: ${currentBuild.currentResult}"
+                body "Build completed, more details at ${env.BUILD_URL}"
+                to "marco.delboccio@est.iudigital.edu.co"
             }
         }
     }
