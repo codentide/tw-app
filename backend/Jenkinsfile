@@ -8,6 +8,8 @@ pipeline {
                 url: 'https://github.com/codentide/wt-application.git'
             }
         }
+        /*
+
         stage('Build docker image') {
             steps {
                 script {
@@ -26,6 +28,7 @@ pipeline {
                 }
             }
         }
+        */
         stage('Deploy docker container') {
             steps {
                 script {
