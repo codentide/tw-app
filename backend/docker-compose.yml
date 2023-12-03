@@ -8,7 +8,10 @@ services:
     ports:
       - "4001:4001"
     networks:
-      - proyecto-app
+      - proyectos-app
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=4001
 
   microservice-proyecto:
     container_name: microservice-proyecto
@@ -18,7 +21,10 @@ services:
     ports:
       - "4002"
     networks:
-      - proyecto-app
+      - proyectos-app
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=4002      
 
   microservice-proyecto-2:
     container_name: microservice-proyecto-2
@@ -28,7 +34,10 @@ services:
     ports:
       - "4002"
     networks:
-      - proyecto-app
+      - proyectos-app
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=4002      
 
   load-balancer:
     container_name: load-balancer
@@ -38,11 +47,31 @@ services:
     ports:
       - "4003:80"
     networks:
-      - proyecto-app
+      - proyectos-app
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=4003   
     depends_on:
       - microservice-proyecto
       - microservice-proyecto-2
-     
+
+  jenkins:
+    container_name: pipe-jenkins
+    image: pipe-jenkins:v1  
+    build:
+      context: ./pipe
+    ports:
+      - "8081:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    restart: always
+    networks:
+      - proyectos-app
 
 networks:
-  proyecto-app:
+  proyectos-app:
+
+volumes:
+  jenkins_home:

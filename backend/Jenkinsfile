@@ -1,0 +1,24 @@
+pipeline{
+    agent any
+    stages{
+        stage('Clone repository') {
+            steps{
+                git branch: 'main', 
+                credentialsId: 'git-jenkins' ,
+                url: 'https://github.com/codentide/wt-application.git'
+            }
+
+        }
+        stage('Build docker image') {
+
+        }
+        stage('Deploy docker container'){
+
+        }
+    }
+    post{
+        always{
+            // Send email after build 
+        }
+    }
+}
