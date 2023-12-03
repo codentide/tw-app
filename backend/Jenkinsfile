@@ -10,15 +10,40 @@ pipeline{
 
         }
         stage('Build docker image') {
+            steps {
+                script {
+                    withCredentialsId ([ 
+                        string(Id: 'MONGO_URI', variable: 'MONGO_URI')
+                    ]) {
+                        docker.build('microservice-proyecto:v1', '--build-arg MONGO_URI=${MONGO_URI} .')
+                    }           
+                }
+            }
 
         }
         stage('Deploy docker container'){
-
+            steps {
+                script {
+                    withCredentialsId ([ 
+                        string(Id: 'MONGO_URI', variable: 'MONGO_URI')
+                    ]) {
+                        sh """
+                            sed '${MONGO_URI}' docker-compose.yml > docker-compose-updated.yml
+                            docker-compose -f docker-compose-updated.yml up -d                         
+                        """
+                    }           
+                }
+            }
         }
     }
     post{
         always{
             // Send email after build 
+            emailext {
+                subject: "Build state: ${currentBuild.currentResult}",
+                body: "Build completed, more details at ${env.BUILD_URL}"
+                to: "marco.delboccio@est.iudigital.edu.co"
+            }
         }
     }
 }
