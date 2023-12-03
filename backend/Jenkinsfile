@@ -8,44 +8,32 @@ pipeline {
                 url: 'https://github.com/codentide/wt-application.git'
             }
         }
-        /*
-
-        stage('Build docker image') {
+        stage('Docker image build'){
             steps {
-                script {
-                    withCredentials([
-                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
-                    ]) {
-                      // Construcción de la imagen para microservice-proyecto
-                        dir('microservice-proyecto') {
-                            sh '''
-                                docker build --build-arg MONGO_URI=${MONGO_URI} -t microservice-proyecto:v1 .
-                            '''
-                        }             
+                    script {
+                        withCredentials([
+                            string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
+                        ]) {
+                            sh """
+                                sed -i "s|\\${MONGO_URI}|****|g" backend/docker-compose.yml
+                                docker-compose -f backend/docker-compose.yml build
+                            """
+                        }
                     }
-
-                    
                 }
-            }
         }
-        */
-        stage('Deploy docker container') {
+
+        stage('Docker container deployment'){
             steps {
                 script {
                     withCredentials([
-                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
+                            string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
-                        /*sh """
-                            sed 's|\\${MONGO_URI}|${MONGO_URI}|g' docker-compose.yml > docker-compose-updated.yml
-                            docker-compose -f docker-compose-updated.yml up -d
+                        sh """
+                            docker-compose -f docker-compose.yml up -d
                         """
-                        */
-                        sh '''
-                            sed -i "s|\\${MONGO_URI}|****|g" ./backend/docker-compose.yml
-                            docker-compose -f ./backend/docker-compose.yml up -d
-                        '''
                     }
-                }                    
+                }
             }
         }
     }

@@ -7,11 +7,10 @@ services:
       context: ./monolithic-app
     ports:
       - "4001:4001"
-    networks:
-      - proyectos-app
     environment:
       - MONGO_URI=${MONGO_URI}
-      - PORT=4001
+    networks:
+      - proyectos-app
 
   microservice-proyecto:
     container_name: microservice-proyecto
@@ -20,11 +19,10 @@ services:
       context: ./microservice-proyecto
     ports:
       - "4002"
-    networks:
-      - proyectos-app
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - PORT=4002      
+      - MONGO_URI=${MONGO_URI}      
+    networks:
+      - proyectos-app  
 
   microservice-proyecto-2:
     container_name: microservice-proyecto-2
@@ -33,11 +31,10 @@ services:
       context: ./microservice-proyecto
     ports:
       - "4002"
-    networks:
-      - proyectos-app
     environment:
-      - MONGO_URI=${MONGO_URI}
-      - PORT=4002      
+      - MONGO_URI=${MONGO_URI}      
+    networks:
+      - proyectos-app  
 
   load-balancer:
     container_name: load-balancer
@@ -47,10 +44,7 @@ services:
     ports:
       - "4003:80"
     networks:
-      - proyectos-app
-    environment:
-      - MONGO_URI=${MONGO_URI}
-      - PORT=4003   
+      - proyectos-app  
     depends_on:
       - microservice-proyecto
       - microservice-proyecto-2
