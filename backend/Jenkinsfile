@@ -40,10 +40,11 @@ pipeline {
                             docker-compose -f docker-compose-updated.yml up -d
                         """
                         */
-                        sh """
-                            sed -i 's|\\${MONGO_URI}|${MONGO_URI}|g' ./docker-compose.yml
+                        sh '''
+                            ls -la   # List files in the directory for verification
+                            sed -i 's|\\****|****|g' ./docker-compose.yml
                             docker-compose up -d
-                        """
+                        '''
                     }
                 }                    
             }
