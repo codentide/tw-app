@@ -1,37 +1,35 @@
-pipeline{
+pipeline {
     agent any
-    stages{
+    stages {
         stage('Clone repository') {
-            steps{
-                git branch: 'main', 
-                credentialsId: 'git-jenkins' ,
+            steps {
+                git branch: 'main',
+                credentialsId: 'git-jenkins',
                 url: 'https://github.com/codentide/wt-application.git'
             }
-
         }
         stage('Build docker image') {
             steps {
                 script {
-                    withCredentialsId ([ 
-                        string(Id: 'MONGO_URI', variable: 'MONGO_URI')
+                    withCredentials([
+                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
                         docker.build('microservice-proyecto:v1', '--build-arg MONGO_URI=${MONGO_URI} .')
-                    }           
+                    }
                 }
             }
-
         }
-        stage('Deploy docker container'){
+        stage('Deploy docker container') {
             steps {
                 script {
-                    withCredentialsId ([ 
-                        string(Id: 'MONGO_URI', variable: 'MONGO_URI')
+                    withCredentials([
+                        string(credentialsId: 'MONGO_URI', variable: 'MONGO_URI')
                     ]) {
                         sh """
                             sed '${MONGO_URI}' docker-compose.yml > docker-compose-updated.yml
-                            docker-compose -f docker-compose-updated.yml up -d                         
+                            docker-compose -f docker-compose-updated.yml up -d
                         """
-                    }           
+                    }
                 }
             }
         }
